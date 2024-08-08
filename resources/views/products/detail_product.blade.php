@@ -1,114 +1,132 @@
 @extends('layout')
 @section('title', 'Shop Shose - Giày Nam Nữ ')
 @section('content')
-<main class="bg_gray">
+
+<main>
     <div class="container margin_30">
-        <div class="page_header">
-            <div class="breadcrumbs">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Category</a></li>
-                    <li>Page active</li>
-                </ul>
-            </div>
-            <h1>Armor Air X Fear</h1>
+        <div class="countdown_inner">{{$products->bestseller}}% 
         </div>
-        <!-- /page_header -->
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="owl-carousel owl-theme prod_pics magnific-gallery">
-                    <div class="item">
-                        <a href="img/products/shoes/product_detail_1.jpg" title="Photo title" data-effect="mfp-zoom-in"><img src="img/products/shoes/product_detail_1.jpg" alt=""></a>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="all">
+                    <div class="slider">
+                        <div class="owl-carousel owl-theme main">
+                            <!-- Hiển thị hình ảnh chính -->
+                            <img src="{{ asset($products->img) }}" alt="" class="main-image" width="100%" height="450px">
+            
+                            @php
+                                $galleryImages = json_decode($products->gallery);
+                            @endphp
+            
+                            @if(is_array($galleryImages) && !empty($galleryImages))
+                                @foreach($galleryImages as $image)
+                                
+                                    <div style="background-image: url('{{ asset('uploads/'.$image) }}');" class="item-box"></div>
+                                @endforeach
+                            @else
+                                <p>No images available</p>
+                            @endif
+                        </div>
+                        <div class="left nonl"><i class="ti-angle-left"></i></div>
+                        <div class="right"><i class="ti-angle-right"></i></div>
                     </div>
-                    <!-- /item -->
-                    <div class="item">
-                        <a href="img/products/shoes/product_detail_2.jpg" title="Photo title" data-effect="mfp-zoom-in"><img src="img/products/product_placeholder_detail_2.jpg" data-src="img/products/shoes/product_detail_2.jpg" alt="" class="owl-lazy"></a>
+                    <div class="slider-two">
+                        <div class="owl-carousel owl-theme thumbs">
+                            @if(is_array($galleryImages) && !empty($galleryImages))
+                                @foreach($galleryImages as $image)
+                                    <div style="background-image: url('{{ asset('uploads/'.$image) }}');" class="item"></div>
+                                @endforeach
+                            @else
+                                <p>No images available</p>
+                            @endif
+                        </div>
+                        <div class="left-t nonl-t"></div>
+                        <div class="right-t"></div>
                     </div>
-                    <!-- /item -->
                 </div>
-                <!-- /carousel -->
+            </div>
+            
+            
+            
+            <div class="col-md-6">
+                <form action="{{ route('cart',['id'=>$products->id]) }}" method="POST">
+                    @csrf
+                <div class="breadcrumbs">
+                    <ul>
+                        <li><a href="{{route('home')}}">Trang chủ</a></li>
+                    </ul>
+                </div>
+                <div class="prod_info">
+                    <h1>{{$products->name}}</h1>
+                    <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>{{$products->view}}lượt xem </em></span>
+                    <div class="prod_options">
+                        <div class="row">
+                            <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Size</strong><a href="#0" data-bs-toggle="modal" data-bs-target="#size-modal"><i class="ti-help-alt"></i></a></label>
+                            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+                                <div class="custom-select-form">
+                                    <select class="wide" name="size">
+                                        <option value="S" selected>Nhỏ (S)</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Số lượng</strong></label>
+                            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+                                <div class="numbers-row">
+                                    <input type="number" value="1" id="quantity_1" class="qty2" name="quantity">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5 col-md-6">
+                            <div class="price_main"><span class="new_price">{{$products->price}}</span><span class="percentage">{{$products->bestseller}}%</span> <span class="old_price">{{$products->price}}</span></div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="btn_add_to_cart"><a href="#0" class="btn_1">Mua ngay</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product_actions">
+                    <ul>
+                        <li>
+                            <a href="#"><i class="ti-heart"></i><span>Thêm vào yêu thích</span></a>
+                        </li>
+                        <li>
+                          
+                             
+                                <input type="hidden" name="name" value="{{ $products->name }}">
+                                <input type="hidden" name="img" value="{{ $products->img }}">
+                                 <input type="hidden" name="price" value="{{ $products->price }}">
+                                <button type="submit" class="btn_1">Thêm vào giỏ hàng</button>
+                         
+                        </li>
+                    </ul>
+                </div>
+            </form>
             </div>
         </div>
         <!-- /row -->
     </div>
     <!-- /container -->
     
-    <div class="bg_white">
-        <div class="container margin_60_35">
-            <div class="row justify-content-between">
-                <div class="col-lg-6">
-                    <div class="prod_info version_2">
-                        <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span>
-                        <p><small>SKU: MTKRY-001</small><br>Lorem ipsum dolor sit amet, his no adipisci pericula conclusionemque. Qui labore salutandi ex, vivendum argumentum mediocritatem vis eu, viris tritani per id. At iudicabit maluisset vis, dicant diceret pri cu. Cum at rebum vulputate forensibus, eruditi principes ad vel, pro denique recusabo at. Ubique nominavi delicata sit cu, quo no reque insolens suscipiantur.</p>
-                        <p>Et phaedrum temporibus per. Antiopam posidonium et est. Eu ius quas modus suavitate, ex sea feugiat laoreet voluptatum. Quo at veritus ancillae complectitur, duo no assum omnes.</p>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="prod_options version_2">
-                        <div class="row">
-                            <label class="col-xl-7 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
-                            <div class="col-xl-5 col-lg-5 col-md-6 col-6 colors">
-                                <ul>
-                                    <li><a href="#0" class="color color_1 active"></a></li>
-                                    <li><a href="#0" class="color color_2"></a></li>
-                                    <li><a href="#0" class="color color_3"></a></li>
-                                    <li><a href="#0" class="color color_4"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-xl-7 col-lg-5 col-md-6 col-6"><strong>Size</strong> - Size Guide <a href="#0" data-bs-toggle="modal" data-bs-target="#size-modal"><i class="ti-help-alt"></i></a></label>
-                            <div class="col-xl-5 col-lg-5 col-md-6 col-6">
-                                <div class="custom-select-form">
-                                    <select class="wide">
-                                        <option value="" selected="">Small (S)</option>
-                                        <option value="">M</option>
-                                        <option value=" ">L</option>
-                                        <option value=" ">XL</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-xl-7 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
-                            <div class="col-xl-5 col-lg-5 col-md-6 col-6">
-                                <div class="numbers-row">
-                                    <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
-                                    <div class="inc button_inc">+</div>
-                                    <div class="dec button_inc">-</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-lg-7 col-md-6">
-                                <div class="price_main"><span class="new_price">$148.00</span><span class="percentage">-20%</span> <span class="old_price">$160.00</span></div>
-                            </div>
-                            <div class="col-lg-5 col-md-6">
-                                <div class="btn_add_to_cart"><a href="#0" class="btn_1">Add to Cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-    </div>
-    <!-- /bg_white -->
-
-    <div class="tabs_product bg_white version_2">
+    <div class="tabs_product">
         <div class="container">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">Description</a>
+                    <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">Mô tả</a>
                 </li>
                 <li class="nav-item">
-                    <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">Reviews</a>
+                    <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">Bình luận</a>
                 </li>
             </ul>
         </div>
     </div>
     <!-- /tabs_product -->
-
     <div class="tab_content_wrapper">
         <div class="container">
             <div class="tab-content" role="tablist">
@@ -116,41 +134,38 @@
                     <div class="card-header" role="tab" id="heading-A">
                         <h5 class="mb-0">
                             <a class="collapsed" data-bs-toggle="collapse" href="#collapse-A" aria-expanded="false" aria-controls="collapse-A">
-                                Description
+                               Mô tả
                             </a>
                         </h5>
                     </div>
-
                     <div id="collapse-A" class="collapse" role="tabpanel" aria-labelledby="heading-A">
                         <div class="card-body">
                             <div class="row justify-content-between">
                                 <div class="col-lg-6">
-                                    <h3>Details</h3>
-                                    <p>Lorem ipsum dolor sit amet, in eleifend <strong>inimicus elaboraret</strong> his, harum efficiendi mel ne. Sale percipit vituperata ex mel, sea ne essent aeterno sanctus, nam ea laoreet civibus electram. Ea vis eius explicari. Quot iuvaret ad has.</p>
-                                    <p>Vis ei ipsum conclusionemque. Te enim suscipit recusabo mea, ne vis mazim aliquando, everti insolens at sit. Cu vel modo unum quaestio, in vide dicta has. Ut his laudem explicari adversarium, nisl <strong>laboramus hendrerit</strong> te his, alia lobortis vis ea.</p>
-                                    <p>Perfecto eleifend sea no, cu audire voluptatibus eam. An alii praesent sit, nobis numquam principes ea eos, cu autem constituto suscipiantur eam. Ex graeci elaboraret pro. Mei te omnis tantas, nobis viderer vivendo ex has.</p>
+                                    <h3>{{$products->name}}</h3>
+                                    <p>{{$products->mota}}</p>
                                 </div>
                                 <div class="col-lg-5">
-                                    <h3>Specifications</h3>
+                                    <h3>Chi tiết sản phẩm</h3>
                                     <div class="table-responsive">
                                         <table class="table table-sm table-striped">
                                             <tbody>
                                                 <tr>
-                                                    <td><strong>Color</strong></td>
-                                                    <td>Blue, Purple</td>
+                                                    <td><strong>Màu</strong></td>
+                                                    <td>Trắng</td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>Size</strong></td>
                                                     <td>150x100x100</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Weight</strong></td>
+                                                    <td><strong>Cân nặng</strong></td>
                                                     <td>0.6kg</td>
                                                 </tr>
-                                                <tr>
+                                                {{-- <tr>
                                                     <td><strong>Manifacturer</strong></td>
                                                     <td>Manifacturer</td>
-                                                </tr>
+                                                </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -165,14 +180,14 @@
                     <div class="card-header" role="tab" id="heading-B">
                         <h5 class="mb-0">
                             <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="false" aria-controls="collapse-B">
-                                Reviews
+                                Bình luận
                             </a>
                         </h5>
                     </div>
                     <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
                         <div class="card-body">
                             <div class="row justify-content-between">
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
                                     <div class="review_content">
                                         <div class="clearfix add_bottom_10">
                                             <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><em>5.0/5.0</em></span>
@@ -182,7 +197,7 @@
                                         <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
                                     </div>
                                 </div>
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
                                     <div class="review_content">
                                         <div class="clearfix add_bottom_10">
                                             <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star empty"></i><i class="icon-star empty"></i><em>4.0/5.0</em></span>
@@ -195,7 +210,7 @@
                             </div>
                             <!-- /row -->
                             <div class="row justify-content-between">
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
                                     <div class="review_content">
                                         <div class="clearfix add_bottom_10">
                                             <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star empty"></i><em>4.5/5.0</em></span>
@@ -205,7 +220,7 @@
                                         <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
                                     </div>
                                 </div>
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
                                     <div class="review_content">
                                         <div class="clearfix add_bottom_10">
                                             <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><em>5.0/5.0</em></span>
@@ -221,7 +236,6 @@
                         </div>
                         <!-- /card-body -->
                     </div>
-                    
                 </div>
                 <!-- /tab B -->
             </div>
@@ -231,142 +245,82 @@
     </div>
     <!-- /tab_content_wrapper -->
 
-    <div class="bg_white">
-        <div class="container margin_60_35">
-            <div class="main_title">
-                <h2>Related</h2>
-                <span>Products</span>
-                <p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
-            </div>
-            <div class="owl-carousel owl-theme products_carousel">
-                <div class="item">
-                    <div class="grid_item">
-                        <span class="ribbon new">New</span>
-                        <figure>
-                            <a href="product-detail-1.html">
-                                <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/4.jpg" alt="">
-                            </a>
-                        </figure>
-                        <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                        <a href="product-detail-1.html">
-                            <h3>ACG React Terra</h3>
-                        </a>
-                        <div class="price_box">
-                            <span class="new_price">$110.00</span>
-                        </div>
-                        <ul>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                        </ul>
-                    </div>
-                    <!-- /grid_item -->
-                </div>
-                <!-- /item -->
-                <div class="item">
-                    <div class="grid_item">
-                        <span class="ribbon new">New</span>
-                        <figure>
-                            <a href="product-detail-1.html">
-                                <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/5.jpg" alt="">
-                            </a>
-                        </figure>
-                        <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                        <a href="product-detail-1.html">
-                            <h3>Air Zoom Alpha</h3>
-                        </a>
-                        <div class="price_box">
-                            <span class="new_price">$140.00</span>
-                        </div>
-                        <ul>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                        </ul>
-                    </div>
-                    <!-- /grid_item -->
-                </div>
-                <!-- /item -->
-                <div class="item">
-                    <div class="grid_item">
-                        <span class="ribbon hot">Hot</span>
-                        <figure>
-                            <a href="product-detail-1.html">
-                                <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/8.jpg" alt="">
-                            </a>
-                        </figure>
-                        <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                        <a href="product-detail-1.html">
-                            <h3>Air Color 720</h3>
-                        </a>
-                        <div class="price_box">
-                            <span class="new_price">$120.00</span>
-                        </div>
-                        <ul>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                        </ul>
-                    </div>
-                    <!-- /grid_item -->
-                </div>
-                <!-- /item -->
-                <div class="item">
-                    <div class="grid_item">
-                        <span class="ribbon off">-30%</span>
-                        <figure>
-                            <a href="product-detail-1.html">
-                                <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/2.jpg" alt="">
-                            </a>
-                        </figure>
-                        <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                        <a href="product-detail-1.html">
-                            <h3>Okwahn II</h3>
-                        </a>
-                        <div class="price_box">
-                            <span class="new_price">$90.00</span>
-                            <span class="old_price">$170.00</span>
-                        </div>
-                        <ul>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                        </ul>
-                    </div>
-                    <!-- /grid_item -->
-                </div>
-                <!-- /item -->
-                <div class="item">
-                    <div class="grid_item">
-                        <span class="ribbon off">-50%</span>
-                        <figure>
-                            <a href="product-detail-1.html">
-                                <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/3.jpg" alt="">
-                            </a>
-                        </figure>
-                        <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                        <a href="product-detail-1.html">
-                            <h3>Air Wildwood ACG</h3>
-                        </a>
-                        <div class="price_box">
-                            <span class="new_price">$75.00</span>
-                            <span class="old_price">$155.00</span>
-                        </div>
-                        <ul>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                        </ul>
-                    </div>
-                    <!-- /grid_item -->
-                </div>
-                <!-- /item -->
-            </div>
-            <!-- /products_carousel -->
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Sản phẩm tương tự</h2>
+            <span>Sản phẩm</span>
+            <p>Một số sản phẩm chung thể loại, bạn có thể xem xét.</p>
         </div>
-        <!-- /container -->
+        <div class="owl-carousel owl-theme products_carousel">
+            @foreach($pro_duct as $pro)
+            <div class="item">
+                <div class="grid_item">
+                    <figure>
+                        {{-- <span class="ribbon off"></span> --}}
+                        <a href="product-detail-1.html">
+                            <img class="" src="{{asset($pro->img)}}" alt=""  width="100%" height="300px">
+                        </a>
+                        <div class="rating">
+                            <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i>
+                        </div>
+                        {{-- <div data-countdown="2019/05/15" class="countdown"></div> --}}
+                    </figure>
+                    <a href="product-detail-1.html">
+                        <h3>{{$pro->name}}</h3>
+                    </a>
+                    <div class="price_box">
+                        <span class="new_price">{{$pro->price}}</span>
+                        {{-- <span class="old_price">$60.00</span> --}}
+                    </div>
+                    <ul>
+                        <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
+                        <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
+                        <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
+                    </ul>
+                </div>
+                <!-- /grid_item -->
+            </div>
+            @endforeach
+           
+        </div>
+        <!-- /products_carousel -->
     </div>
-    <!-- /bg_white -->
+    <!-- /container -->
+
+    <div class="feat">
+        <div class="container">
+            <ul>
+                <li>
+                    <div class="box">
+                        <i class="ti-gift"></i>
+                        <div class="justify-content-center">
+                            <h3>Miễn phí vận chuyển</h3>
+                            <p>Cho tất cả đơn hàng 500k</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <i class="ti-wallet"></i>
+                        <div class="justify-content-center">
+                            <h3>Thanh toán an toàn</h3>
+                            <p>Thanh toán an toàn 100%</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <i class="ti-headphone-alt"></i>
+                        <div class="justify-content-center">                      
+                        <h3>Hỗ trợ 24/7</h3>
+                        <p>Hỗ trợ trực tuyến hàng đầu</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/feat-->
 
 </main>
 @endsection

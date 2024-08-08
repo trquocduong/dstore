@@ -142,6 +142,14 @@
                           <img src="{{ asset($products->img) }}" alt="Hình ảnh sản phẩm" class="img-fluid" width="150">
                         </div>
                       </div>
+                      <div class="col form-group mb-3">
+                        <label for="gallery">Bộ sưu tập <span class="text-danger">*</span></label>
+                        <input type="file" name="gallery[]" id="gallery" class="form-control d-block" multiple>
+                        @foreach(json_decode($products->gallery) as $image)
+                        <img src="{{ asset('img/' . $image) }}" width="90px" alt="Gallery Image">
+                        @endforeach
+                        <span class="err" id="galleryErr"></span>
+                    </div>
                       <div class="mb-3">
                         <label for="inputPassword4" class="form-label">Tên Sản Phẩm</label>
                         <input type="" class="form-control" id="inputPassword4"  value="{{$products->name}}" name="name">

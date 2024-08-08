@@ -16,17 +16,19 @@ use App\Http\Controllers\Admin\VoucherController;
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'home')->name('home');
     Route::get('/new', 'new')->name('new');
-    // Route::get('/about', 'about')->name('about');
-    // Route::get('/contact', 'contact')->name('contact');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/contact', 'contact')->name('contact');
+        // Route::get('/detail', 'detail')->name('detail');
 
     // Route::get('/services', 'services')->name('services');
-    // Route::get('/detail', 'detail')->name('detail');
+
     // Route::get('/cart', 'cart')->name('cart');
     // Route::get('/personal', 'personal')->name('personal');
     // Route::get('/heart', 'heart')->name('heart')->middleware('auth');
     // Route::get('/change', 'change')->name('change');
     // Route::get('/news', 'news')->name('news');
 });
+Route::post('/checkout/voucher', [ProductController::class, 'apply'])->name('apply.voucher');
 Route::prefix('/')->controller(AuthController::class)->group(function ()  {
     Route::get('/admin', 'admin')->name('admin');
     Route::get('/login', 'login')->name('login');
@@ -39,18 +41,28 @@ Route::prefix('/')->controller(AuthController::class)->group(function ()  {
     Route::post('/store', 'store')->name('store');
 });
 Route::prefix('/')->controller(ProductController::class)->group(function ()  {
-    Route::get('/detail_category', 'detail_category')->name('detail_category');
-    Route::get('/detail_product', 'detail_product')->name('detail_product');
+    Route::get('/detail_category/{id}', 'detail_category')->name('detail_category');
+    Route::get('/detail_product/{id}', 'detail_product')->name('detail_product');
     Route::get('/products', 'products')->name('products');
     Route::post('/', 'fillter')->name('fillter');
     Route::post('/fillterview', 'fillterview')->name('fillterview');
     Route::get('/heartadd', 'showHeart')->name('heartadd');
-    Route::post('/heart/add/{id}', 'getHeart')->name('heart.add');
+    Route::post('/heart/add/{id}', 'getHeart')->name('add.favorite');
     Route::get('/heart/remove/{id}', 'removeHeart')->name('heart.remove');
     Route::post('/cart/{id}', 'getCart')->name('cart');
     Route::get('/cartadd', 'showCart')->name('cartadd');
     Route::delete('/cart/{id}', 'removeItem')->name('cart.remove');
     Route::delete('/cart_clear', 'clearCart')->name('cart_clear');
+    Route::get('/search', 'search')->name('product.search');
+    Route::get('/checkout', 'checkoutForm')->name('checkout.form');
+    Route::post('/checkout',  'checkout')->name('checkout.process');
+    Route::get('/order/{id}', 'showOrder')->name('order.show');
+    Route::get('/bill', 'Bill')->name('bill');
+    Route::get('/billdt/{id}', 'BillDetail')->name('billdt');
+    Route::patch('/update-quantity/{id}', 'updateQuantity')->name('updateQuantity');
+    Route::get('/payment-page', 'showPaymentPage')->name('payment.page');
+    Route::post('/payment-continue', 'continuePayment')->name('payment.continue');
+    Route::post('/payment-update','updatePayment')->name('payment.update');
 });
 
 //----------------------------------------------------------------admin ----------------------------------------------------------------
@@ -82,10 +94,9 @@ Route::prefix('/')->controller(CategoryController::class)->group(function () {
 });
 Route::controller(BillController::class)->group(function () {
     Route::get('/bill', 'bill')->name('bill');
-    Route::get('/bill/detail/{id}', 'getBillDetail')->name('bill_detail');
-    Route::post('/updateStatus', 'updateStatus')->name('updateStatus');
-    Route::post('/updateStatusUser', 'updateStatusUser')->name('updateStatusUser');
-    Route::delete('/delete_bill/{id}', 'delete_bill')->name('delete_bill');
+    Route::post('/bills/{id}/approve', 'approve')->name('bills.approve');
+    Route::delete('/bills/{id}/cancel', 'cancel')->name('bills.cancel');// huỷ đơn
+    Route::delete('/bills/{id}', 'destroy')->name('bills.destroy');//xoá
 });
 Route::prefix('/')->controller(BannerController::class)->group(function () {
     Route::get('/banner', 'banner')->name('banner');

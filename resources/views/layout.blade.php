@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
+    @php
+    use Illuminate\Support\Str;
+    @endphp
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,14 +24,19 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- BASE CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/style.css')}}" rel="stylesheet">
 
 	<!-- SPECIFIC CSS -->
-    <link href="css/home_1.css" rel="stylesheet">
+    <link href="{{asset('css/checkout.css')}}" rel="stylesheet">
+    <link href="{{asset('css/product_page.css')}}" rel="stylesheet">
+    <link href="{{asset('css/about.css')}}" rel="stylesheet">
+    <link href="{{asset('css/blog.css')}}" rel="stylesheet">
+    <link href="{{asset('css/home_1.css')}}" rel="stylesheet">
+    <link href="{{asset('css/contact.css')}}" rel="stylesheet">
 
     <!-- YOUR CUSTOM CSS -->
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="{{asset('css/custom.css')}}" rel="stylesheet">
 
 </head>
 
@@ -52,12 +59,13 @@
     <div id="toTop"></div><!-- Back to top button -->
 	
 	<!-- COMMON SCRIPTS -->
-    <script src="js/common_scripts.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="{{asset('js/common_scripts.min.js')}}"></script>
+    <script src="{{asset('js/main.js')}}"></script>
 	
 	<!-- SPECIFIC SCRIPTS -->
-	<script src="js/modernizr.js"></script>
-	<script src="js/video_header.min.js"></script>
+	<script src="{{asset('js/modernizr.j')}}s"></script>
+	<script src="{{asset('js/video_header.min.js')}}"></script>
+    <script  src="{{asset('js/carousel_with_thumbs.js')}}"></script>
 	<script>
 		// Video Header
 		HeaderVideo.init({
@@ -68,6 +76,7 @@
 		});
 	</script>
 	<script src="js/isotope.min.js"></script>
+
 	<script>
 		// Isotope filter
 		$(window).on('load',function(){
@@ -79,6 +88,7 @@
 		  $('.isotope-wrapper').isotope({ filter: selector });
 		});
 	</script>
+    
 
 </body>
 </html>

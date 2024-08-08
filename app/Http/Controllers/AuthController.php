@@ -5,6 +5,12 @@ use App\Models\UserModel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\ProductsModel;
+use App\Models\BillModel;
+use App\Models\CategoryModel;
+use App\Models\User;
+
+
 
 class AuthController extends Controller
 {
@@ -31,19 +37,13 @@ class AuthController extends Controller
 
     public function admin(){
         if(Auth::check() && Auth::user()->role == 1){
-            // thống kê tài khoản 
-        //     $account= AccountModel::count();
-        //     // thống kê danh mục 
-        //     $category= CategoryModel::count();
-        //     // thống kê sản phẩm 
-        //    $product = ProductModel::count();
-        //    // thống kê đơn hàng 
-        //    $order = Orders::count();
-        //    // duyệt sản phẩm
-        //    $orders = Orders::with(['orderItems.product'])
-        //    ->where('status', 'Chờ xác nhận')
-        //    ->get();
-            return view('admin.components.home');
+            $user = User::count();
+            $products = ProductsModel::count();
+            $categories = CategoryModel::count();
+            $bills = BillModel::count();
+            $needadd =ProductsModel::where('quantity','0')->orderBy('id')->get();
+            $billadd =BillModel::where('status','1')->orderBy('id')->get();
+            return view('admin.components.home',compact('user', 'products', 'categories', 'bills','needadd','billadd'));
         }
         return redirect()->route("loginadmin");
 

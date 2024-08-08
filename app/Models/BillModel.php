@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class BillModel extends Model
 {
     use HasFactory;
+    protected $table = 'orders';
+    protected $guarded = [];
 }

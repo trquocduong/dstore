@@ -2,6 +2,7 @@
 $favorite = \App\Models\Favorite::where('user_id', Auth::id())->get();
 $count = count($favorite);
 $cart = \App\Models\CartModel::where('user_id', Auth::id())->get();
+$category = \App\Models\CategoryModel::get();
 $countcart = count($cart);
 // $total = 0;
 // foreach ($cart as $item) {
@@ -16,7 +17,7 @@ $countcart = count($cart);
 				<div class="row small-gutters">
 					<div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
 						<div id="logo">
-							<a href="index.html"><img src="assets/img/D.png" alt="" width="70" height="55" style="border-radius: 50%"></a>
+							<a href="index.html"><img src="{{asset('assets/img/D.png')}}" alt="" width="70" height="55" style="border-radius: 50%"></a>
 						</div>
 					</div>
 					<nav class="col-xl-6 col-lg-7">
@@ -44,7 +45,7 @@ $countcart = count($cart);
 									</ul> --}}
 								</li>
 								<li class="">
-									<a href="javascript:void(0);" >Giới Thiệu</a>
+									<a href="{{route('about')}}" >Giới Thiệu</a>
 									<div class="menu-wrapper">
 										{{-- <div class="row small-gutters">
 											<div class="col-lg-3">
@@ -99,25 +100,16 @@ $countcart = count($cart);
 								<li class="submenu">
 									<a href="{{route('products')}}" class="show-submenu">Sản Phẩm</a>
 									<ul>
-										<li><a href="header-2.html">Header Style 2</a></li>
-										<li><a href="header-3.html">Header Style 3</a></li>
-										<li><a href="header-4.html">Header Style 4</a></li>
-										<li><a href="header-5.html">Header Style 5</a></li>
-										<li><a href="404.html">404 Page</a></li>
-										<li><a href="sign-in-modal.html">Sign In Modal</a></li>
-										<li><a href="contacts.html">Contact Us</a></li>
-										<li><a href="about.html">About 1</a></li>
-										<li><a href="about-2.html">About 2</a></li>
-										<li><a href="modal-advertise.html">Modal Advertise</a></li>
-										<li><a href="modal-newsletter.html">Modal Newsletter</a></li>
-										<li><a href="gallery.html">Gallery Page</a></li>
+										@foreach($category as $categorys)
+										<li><a href="{{ route('detail_category', ['id' => $categorys->id]) }}">{{$categorys->name}}</a></li>
+										@endforeach
 									</ul>
 								</li>
 								<li>
 									<a href="{{route('new')}}">Tin Tức</a>
 								</li>
 								<li>
-									<a href="#0">Liên Hệ</a>
+									<a href="{{route('contact')}}">Liên Hệ</a>
 								</li>
 							</ul>
 						</div>
@@ -150,56 +142,17 @@ $countcart = count($cart);
 									</span>
 									<div id="menu">
 										<ul>
-											<li><span><a href="#0">Collections</a></span>
-												<ul>
+											@foreach($category as $categorye)
+											<li><span><a href="{{ route('detail_category', ['id' => $categorye->id]) }}">{{$categorye->name}}</a></span>
+												{{-- <ul>
 													<li><a href="listing-grid-1-full.html">Trending</a></li>
 													<li><a href="listing-grid-2-full.html">Life style</a></li>
 													<li><a href="listing-grid-3.html">Running</a></li>
 													<li><a href="listing-grid-4-sidebar-left.html">Training</a></li>
 													<li><a href="listing-grid-5-sidebar-right.html">View all Collections</a></li>
-												</ul>
+												</ul> --}}
 											</li>
-											<li><span><a href="#">Men</a></span>
-												<ul>
-													<li><a href="listing-grid-6-sidebar-left.html">Offers</a></li>
-													<li><a href="listing-grid-7-sidebar-right.html">Shoes</a></li>
-													<li><a href="listing-row-1-sidebar-left.html">Clothing</a></li>
-													<li><a href="listing-row-3-sidebar-left.html">Accessories</a></li>
-													<li><a href="listing-row-4-sidebar-extended.html">Equipment</a></li>
-												</ul>
-											</li>
-											<li><span><a href="#">Women</a></span>
-												<ul>
-													<li><a href="listing-grid-1-full.html">Best Sellers</a></li>
-													<li><a href="listing-grid-2-full.html">Clothing</a></li>
-													<li><a href="listing-grid-3.html">Accessories</a></li>
-													<li><a href="listing-grid-4-sidebar-left.html">Shoes</a></li>
-												</ul>
-											</li>
-											<li><span><a href="#">Boys</a></span>
-												<ul>
-													<li><a href="listing-grid-6-sidebar-left.html">Easy On Shoes</a></li>
-													<li><a href="listing-grid-7-sidebar-right.html">Clothing</a></li>
-													<li><a href="listing-row-3-sidebar-left.html">Must Have</a></li>
-													<li><a href="listing-row-4-sidebar-extended.html">All Boys</a></li>
-												</ul>
-											</li>
-											<li><span><a href="#">Girls</a></span>
-												<ul>
-													<li><a href="listing-grid-1-full.html">New Releases</a></li>
-													<li><a href="listing-grid-2-full.html">Clothing</a></li>
-													<li><a href="listing-grid-3.html">Sale</a></li>
-													<li><a href="listing-grid-4-sidebar-left.html">Best Sellers</a></li>
-												</ul>
-											</li>
-											<li><span><a href="#">Customize</a></span>
-												<ul>
-													<li><a href="listing-row-1-sidebar-left.html">For Men</a></li>
-													<li><a href="listing-row-2-sidebar-right.html">For Women</a></li>
-													<li><a href="listing-row-4-sidebar-extended.html">For Boys</a></li>
-													<li><a href="listing-grid-1-full.html">For Girls</a></li>
-												</ul>
-											</li>
+											@endforeach
 										</ul>
 									</div>
 								</li>
@@ -208,8 +161,10 @@ $countcart = count($cart);
 					</div>
 					<div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
 						<div class="custom-search-input">
-							<input type="text" placeholder="Tìm kiếm trên 10.000 sản phẩm ?">
-							<button type="submit"><i class="header-icon_search_custom"></i></button>
+							<form action="{{ route('product.search') }}" method="GET">
+								<input type="text" name="query" placeholder="Tìm kiếm trên 10.000 sản phẩm ?">
+								<button type="submit"><i class="header-icon_search_custom"></i></button>
+							</form>
 						</div>
 					</div>
 					<div class="col-xl-3 col-lg-2 col-md-3">
@@ -320,9 +275,12 @@ $countcart = count($cart);
 				<!-- /row -->
 			</div>
 			<div class="search_mob_wp">
-				<input type="text" class="form-control" placeholder="Tìm kiếm trên 10.000 sản phẩm ?">
-				<input type="submit" class="btn_1 full-width" value="Search">
+				<form action="{{ route('product.search') }}" method="GET">
+					<input type="text" name="query" class="form-control" placeholder="Tìm kiếm trên 10.000 sản phẩm ?">
+					<input type="submit" class="btn_1 full-width" value="Search">
+				</form>
 			</div>
+			
 			<!-- /search_mobile -->
 		</div>
 		<!-- /main_nav -->

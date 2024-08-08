@@ -24,7 +24,15 @@ class HomeController extends Controller
     }
     
     public function new(){
-        return view('pages.new');
+        $news=NewModel::where('hienthi', '1')->get();
+        $blog=NewModel::get();
+        return view('pages.new',compact('blog','news'));
+    }
+    public function contact(){
+        return view('pages.contact');
+    }
+    public function about(){
+        return view('pages.about');
     }
 
 }

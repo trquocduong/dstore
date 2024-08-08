@@ -153,14 +153,16 @@
                             <img src="{{$item->img}}" class="avatar avatar-sm me-3" alt="user1">
                           </div>
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">{{$item->title}}</h6>
-                            <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
+                            <h6 class="mb-0 text-sm">
+                              {{ Str::limit($item->title, 15)}}
+                            </h6>
+                            {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                           </div>
                         </div>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0">{{$item->mota}}</p>
-                        <p class="text-xs text-secondary mb-0">Organization</p>
+                        <p class="text-xs font-weight-bold mb-0"> {{ Str::limit($item->mota, 15)}}</p>
+                        {{-- <p class="text-xs text-secondary mb-0">Organization</p> --}}
                       </td>
                       @if($item->hienthi==0)
                       <td class="align-middle text-center text-sm">

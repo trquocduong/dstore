@@ -1,25 +1,26 @@
 @extends('layout')
 @section('title', 'Shop Shose - Giày Nam Nữ ')
 @section('content')
+@php
+$totalPrice = 0; // Khởi tạo biến tổng giá trị đơn hàng
+$discount = 0; // Khởi tạo biến giảm giá
+@endphp
 <main class="bg_gray">
     <div class="container margin_30">
     <div class="page_header">
         <div class="breadcrumbs">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Category</a></li>
-                <li>Page active</li>
+                <li><a href="{{asset('home')}}">Trang chủ</a></li>
+                <li><a href="#">Giỏ hàng</a></li>
             </ul>
         </div>
-        <h1>Cart page</h1>
+        <h1>Giỏ hàng</h1>
     </div>
     <!-- /page_header -->
     <table class="table table-striped cart-list">
                         <thead>
                             <tr>
-                                <th>
-                                    Thực hiện
-                                </th>
+                               
                                 <th>
                                     Hình ảnh
                                 </th>
@@ -33,20 +34,14 @@
                                    Số lượng
                                 </th>
                                 <th>
-                                    Tổng tiền
+                                    Thực hiện
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($cart as $item)
                             <tr>
-                                <td>
-                                    <form action="{{ route('cart.remove', ['id' => $item->id]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="remove-btn">Xóa</button>
-                                    </form>
-                                </td>
+                             
                                 <td>
                                     <div class="thumb_cart">
                                         <img src="{{ $item->product->img}}"  alt="Image" width="150" height="100px">
@@ -60,62 +55,144 @@
                                     <strong>{{$item->price}}</</strong>
                                 </td>
                                 <td>
-                                    <div class="numbers-row">
-                                        <input type="text" value="{{$item->quantity}}" id="quantity_1" class="qty2" name="quantity_1">
-                                    <div class="inc button_inc">+</div><div class="dec button_inc">-</div>
+                                    <div class="d-flex align-items-center">
+                                        <form method="POST" action="{{ route('updateQuantity', ['id' => $item->id]) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="quantity" value="{{ $item->quantity - 1 }}">
+                                            <button type="submit" class="btn btn-light">-</button>
+                                        </form>
+                                    
+                                        <span class="mx-2">{{ $item->quantity }}</span>
+                                    
+                                        <form method="POST" action="{{ route('updateQuantity', ['id' => $item->id]) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
+                                            <button type="submit" class="btn btn-light">+</button>
+                                        </form>
+                                    </div>
+                                    
                                 </div>
                                 </td>
                                 <td>
-                                    <strong>{{$item->price}}</</strong>
+                                    <form action="{{ route('cart.remove', ['id' => $item->id]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="remove-btn">Xóa</button>
+                                    </form>
                                 </td>
-                            
+                                @php
+                                // Tính tổng giá trị của từng sản phẩm và cộng dồn vào tổng giá trị đơn hàng
+                                $totalPrice += $item->quantity * $item->price;
+                                @endphp
+                               
+                              
                             </tr>
                             @endforeach
                          
                         </tbody>
                     </table>
 
-                    <div class="row add_top_30 flex-sm-row-reverse cart_actions">
-                    <div class="col-sm-4 text-end">
-                        <button type="button" class="btn_1 gray">Update Cart</button>
-                    </div>
-                        <div class="col-sm-8">
-                        <div class="apply-coupon">
-                            <div class="form-group">
-                                <div class="row g-2">
-                                    <div class="col-md-6"><input type="text" name="coupon-code" value="" placeholder="Promo code" class="form-control"></div>
-                                    <div class="col-md-4"><button type="button" class="btn_1 outline">Apply Coupon</button></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /cart_actions -->
-
     </div>
     <!-- /container -->
     
     <div class="box_cart">
         <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-xl-4 col-lg-4 col-md-6">
-        <ul>
-            <li>
-                <span>Subtotal</span> $240.00
-            </li>
-            <li>
-                <span>Shipping</span> $7.00
-            </li>
-            <li>
-                <span>Total</span> $247.00
-            </li>
-        </ul>
-        <a href="cart-2.html" class="btn_1 full-width cart">Proceed to Checkout</a>
-                </div>
-            </div>
+        <table class="table">
+            <h5>TỔNG ĐƠN HÀNG</h5>
+            <tr>
+                <td>Tạm tính</td>
+                <td class="totalPrice">{{ number_format($totalPrice, 0, ',', '.') . ' đ' }}</td>
+            </tr>
+            <tr>
+                <td>Giảm Giá</td>
+                <td class="sale">{{ number_format($discount, 0, ',', '.') . ' đ' }}</td>
+            </tr>
+            <tr>
+                <td>Tổng cộng</td>
+                <td class="totalPrice1"><strong>{{ number_format($totalPrice - $discount, 0, ',', '.') . ' đ' }}</strong></td>
+            </tr>
+        </table>
+        <div class="d-flex justify-content-end">
+            <button class="btn bg-danger text-white m-3">
+                <a href="{{route('checkout.form')}}" style="color:white;text-decoration: none">
+                    Tiếp Tục Thanh toán
+                </a>
         </div>
     </div>
+</div>
+
     <!-- /box_cart -->
     
 </main>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    // Lắng nghe sự kiện khi nút tăng số lượng được click
+    document.querySelectorAll('.increaseQuantity').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const quantityElement = row.querySelector('.quantity');
+            const subtotalElement = row.querySelector('.total-price');
+            const totalPriceElement = document.querySelector('.totalPrice');
+            const saleElement = document.querySelector('.sale');
+            const totalPrice1Element = document.querySelector('.totalPrice1');
+
+            let quantity = parseInt(quantityElement.textContent);
+            quantity++;
+            quantityElement.textContent = quantity;
+
+            let unitPrice = parseFloat(subtotalElement.getAttribute('data-price'));
+            let newSubtotal = unitPrice * quantity;
+            subtotalElement.textContent = numberWithCommas(newSubtotal.toFixed(0)) + ' đ';
+
+            let total = parseFloat(totalPriceElement.textContent.replace(/\D/g, '')) || 0;
+            total += unitPrice;
+            totalPriceElement.textContent = numberWithCommas(total.toFixed(0)) + ' đ';
+
+            // Cập nhật tổng cộng
+            let discount = parseFloat(saleElement.textContent.replace(/\D/g, '')) || 0;
+            totalPrice1Element.textContent = numberWithCommas((total - discount).toFixed(0)) + ' đ';
+        });
+    });
+
+    // Lắng nghe sự kiện khi nút giảm số lượng được click
+    document.querySelectorAll('.decreaseQuantity').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const quantityElement = row.querySelector('.quantity');
+            const subtotalElement = row.querySelector('.total-price');
+            const totalPriceElement = document.querySelector('.totalPrice');
+            const saleElement = document.querySelector('.sale');
+            const totalPrice1Element = document.querySelector('.totalPrice1');
+
+            let quantity = parseInt(quantityElement.textContent);
+            if (quantity > 1) {
+                quantity--;
+                quantityElement.textContent = quantity;
+
+                let unitPrice = parseFloat(subtotalElement.getAttribute('data-price'));
+                let newSubtotal = unitPrice * quantity;
+                subtotalElement.textContent = numberWithCommas(newSubtotal.toFixed(0)) + ' đ';
+
+                let total = parseFloat(totalPriceElement.textContent.replace(/\D/g, '')) || 0;
+                total -= unitPrice;
+                totalPriceElement.textContent = numberWithCommas(total.toFixed(0)) + ' đ';
+
+                // Cập nhật tổng cộng
+                let discount = parseFloat(saleElement.textContent.replace(/\D/g, '')) || 0;
+                totalPrice1Element.textContent = numberWithCommas((total - discount).toFixed(0)) + ' đ';
+            }
+        });
+    });
+
+    // Hàm định dạng số có dấu phẩy ngăn cách hàng nghìn
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+});
+
+
+</script>
 @endsection

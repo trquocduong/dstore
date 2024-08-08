@@ -54,6 +54,20 @@ class ProductsController extends Controller
       } else {
           $data['img'] = null;
       }
+      if ($request->hasFile('gallery')) {
+         $imgData = [];
+
+         foreach ($request->file('gallery') as $file) {
+             $name = $file->getClientOriginalName();
+             $file->move(public_path('img'), $name);
+             $imgData[] = $name;
+         }
+
+         // Save gallery image data to the database
+         $data['gallery'] = json_encode($imgData);
+     } else {
+         return "Gallery images not uploaded";
+     }
       ProductsModel::create($data); 
       return redirect()->route('product')->with('success', 'Thành công ');
   }
@@ -86,6 +100,20 @@ class ProductsController extends Controller
             $file->move(public_path('uploads'), $imageName);
             $data['img'] = 'uploads/' . $imageName;
          } 
+         $galleryUploaded = false;
+         if ($request->hasFile('gallery')) {
+             $imgData = [];
+ 
+             foreach ($request->file('gallery') as $file) {
+                 $name = $file->getClientOriginalName();
+                 $file->move(public_path('img'), $name);
+                 $imgData[] = $name;
+             }
+ 
+             // Save gallery image data to the database
+             $data['gallery'] = json_encode($imgData);
+             $galleryUploaded = true;
+         }
          $product->update($data); 
          return redirect()->route('product')->with('success', 'Thành công ');
       }

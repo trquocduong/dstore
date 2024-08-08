@@ -1,9 +1,7 @@
-{{-- @extends('admin.layout')
-@section('titlepage','Quản lí sản phẩm')
-@section('content') --}}
 @extends('admin.layout')
 @section('title', 'Shop Shose - Giày Nam Nữ ')
 @section('content')
+
 
 
 <main class="main-content position-relative border-radius-lg ">
@@ -150,6 +148,7 @@
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tên sản phẩm</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Ảnh phụ</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Giá</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Số lượng</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Luợt xem</th>
@@ -177,6 +176,18 @@
                          </p>
                           </div>
                         </div>
+                      </td>
+                      <td>
+                        @php
+                        $images = json_decode($item->gallery); // Giải mã JSON
+                        @endphp
+                        @if(is_array($images) && count($images) > 0)
+                          @foreach($images as $image)
+                            <img src="{{ asset('img/' . $image) }}" width="50px" alt="Gallery Image">
+                          @endforeach
+                        @else
+                          <p>Không có hình ảnh</p>
+                        @endif
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0">{{$item->price}}</p>

@@ -138,6 +138,11 @@
                         <label for="inputEmail4" class="form-label">Hình Ảnh</label>
                         <input type="file" name="img">
                       </div>
+                      <div class="col form-group mb-3">
+                        <label for="gallery">Hình Ảnh Khác<span class="text-danger">*</span></label>
+                        <input type="file" name="gallery[]" id="gallery" class="form-control d-block" multiple>
+                        <span class="err" id="galleryErr"></span>
+                    </div>
                       <div class="mb-3">
                         <label for="inputPassword4" class="form-label">Tên Sản Phẩm</label>
                         <input type="" class="form-control" id="inputPassword4" placeholder="Nhập tên sản phẩm" name="name">

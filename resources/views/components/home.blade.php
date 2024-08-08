@@ -64,7 +64,7 @@
     <div class="row small-gutters categories_grid">
         @foreach ($categories as $category)
             <div class="col-sm-6 col-md-3">
-                <a href="{{ route('detail_category', ['category' => $category->id]) }}">
+                <a href="{{ route('detail_category', ['id' => $category->id]) }}">
                     <img src="{{$category->img}}"  alt="{{ $category->name }}" class="img-fluid lazy" width="100%">
                     <div class="wrapper">
                         <h2>{{ $category->name }}</h2>
@@ -98,7 +98,7 @@
                     <div class="grid_item">
                         <span class="ribbon off">-{{$sale_row->bestseller}}%</span>
                         <figure>
-                            <a href="product-detail-1.html">
+                            <a href="{{route('detail_product',['id'=>$sale_row->id])}}">
                                 <img class="" src="{{ $sale_row->img }}"  width="100%" height="300px">
                                 <img class="" src="{{ $sale_row->img }}"  width="100%" height="300px">
                             </a>
@@ -119,7 +119,7 @@
                                         document.getElementById('heart.addsale_{{ $sale_row->id }}').submit();">
                                         <i class="ti-heart"></i>
                                     </a>
-                                    <form id="heart.addsale_{{ $sale_row->id }}" action="{{ route('heart.add', ['id' => $sale_row->id]) }}"
+                                    <form id="heart.addsale_{{ $sale_row->id }}" action="{{ route('add.favorite', ['id' => $sale_row->id]) }}"
                                         method="POST">
                                         @csrf
                                     </form>
@@ -140,12 +140,13 @@
                                         method="POST">
                                         @csrf
                                         <input type="hidden" name="name" value="{{ $sale_row->name }}">
+                                        <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="img" value="{{ $sale_row->img }}">
                                          <input type="hidden" name="price" value="{{ $sale_row->price }}">
                                     </form>
                                 @else
                                     <a href="{{ route('home') }}" onclick="alert('Bạn cần đăng nhập để thực hiện chức năng này.');">
-                                        <i class="ti-heart"></i>
+                                        <i class="ti-shopping-cart"></i>
                                     </a>
                                 @endauth
                             </li>
@@ -158,7 +159,7 @@
                     <div class="grid_item">
                         <span class="ribbon new">New</span>
                         <figure>
-                            <a href="product-detail-1.html">
+                            <a href="{{route('detail_product',['id'=>$new->id])}}">
                                 <img class="" src="{{ $new->img }}"  width="100%" height="300px">
                                 <img class="" src="{{ $new->img }}"  width="100%" height="300px">
                             </a>
@@ -179,7 +180,7 @@
                                         document.getElementById('heart.add_{{ $new->id }}').submit();">
                                     <i class="ti-heart"></i>
                                 </a>
-                                <form id="heart.add_{{ $new->id }}" action="{{ route('heart.add', ['id' => $new->id]) }}"
+                                <form id="heart.add_{{ $new->id }}" action="{{ route('add.favorite', ['id' => $new->id]) }}"
                                     method="POST">
                                     @csrf
                                     {{-- Bổ sung các trường form bổ sung nếu cần --}}
@@ -271,7 +272,7 @@
                         <li>{{$blogs->created_at}}</li>
                     </ul>
                     <h4>{{$blogs->title}}</h4>
-                    <p>{{$blogs->mota}}</p>
+                    <p>{{ Str::limit($blogs->mota, 105)}}</p>
                 </a>
             </div>
             @endforeach
