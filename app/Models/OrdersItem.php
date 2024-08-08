@@ -14,7 +14,7 @@ class OrdersItem extends Model
 
     public function order()
     {
-        return $this->belongsTo(Orders::class, 'order_id');
+        return $this->belongsTo(Orders::class, 'orders_id'); // Đảm bảo 'order_id' là đúng
     }
     
 

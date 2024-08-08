@@ -12,6 +12,7 @@ use App\Models\Orders;
 use App\Models\OrdersItem;
 use App\Models\VoucherModel;
 use App\Models\Favorite;
+use App\Models\Comment;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -25,11 +26,34 @@ class ProductController extends Controller
     return view('products.detail_category',compact('products','banner'));
 
     }
-    public function detail_product($id){
-        $products=ProductsModel::findOrFail($id);
+    public function detail_product($id)
+    {
+        $products = ProductsModel::findOrFail($id);
         $pro_duct = ProductsModel::limit(6)->get();
-        return view('products.detail_product',compact('products','pro_duct'));
+    
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        $user = auth()->user();
+        $hasPurchased = false;
+    
+        $user = auth()->user();
+    $hasPurchased = false;
+
+    if ($user) {
+        // Giả sử bạn có bảng `orders` với `user_id` và `order_id` liên kết với `orders_items`
+        $hasPurchased = Orders::where('iduser', $user->id)
+                              ->whereHas('items', function ($query) use ($id) {
+                                  $query->where('product_id', $id);
+                              })
+                              ->exists();
     }
+    $comments = Comment::where('product_id', $id)->where('hiden', '1')
+                       ->with('user') // Eager load user
+                       ->get();
+    // dd($hasPurchased); 
+    
+        return view('products.detail_product', compact('products', 'pro_duct', 'hasPurchased', 'comments'));
+    }
+    
     public function fillter(Request $request){
         $categoryId = $request->iddm;
         $banner = BannerModel::where('hide', '1')->first();
@@ -87,7 +111,6 @@ class ProductController extends Controller
     }
     public function getCart(Request $request, $id) {
         $product = ProductsModel::findOrFail($id);
-        // dd($request->all());
         $cart = CartModel::updateOrCreate(
             [
                 'user_id' => Auth::id(),
@@ -149,18 +172,6 @@ public function checkoutForm() {
 
     return view('pages.checkout', compact('user', 'cart', 'total'));
 }
-
-    // public function updateCart(Request $request) {
-    //     $user = auth()->user();
-    //     $cartItem = CartModel::where('user_id', $user->id)->where('id', $request->id)->first();
-    
-    //     if ($cartItem) {
-    //         $cartItem->quantity = $request->quantitys;
-    //         $cartItem->save();
-    //     }
-    
-    //     return redirect()->route('checkout');
-    // }
     public function updateQuantity(Request $request, $id)
 {
     // Tìm item trong giỏ hàng hoặc cơ sở dữ liệu
@@ -296,5 +307,36 @@ public function checkout(Request $request) {
                 $order = Orders::with(['orderItems.product'])->findOrFail($id);
                 return view('billdetail', compact('order'));
             }
+
+            //cmt
+public function addComment(Request $request, $productId)
+{
+    $user = auth()->user();
+    $hasPurchased = Orders::where('iduser', $user->id)
+    ->whereHas('items', function ($query) use ($productId) {
+        $query->where('product_id', $productId);
+    })
+    ->exists();
+
+    if (!$hasPurchased) {
+        return redirect()->back()->with('error', 'You need to purchase the product before commenting.');
+    }
+
+    $request->validate([
+        'rating' => 'required|integer|min:1|max:5',
+        'comment' => 'required|string|max:1000',
+    ]);
+
+    Comment::create([
+        'user_id' => $user->id,
+        'product_id' => $productId,
+        'rating' => $request->rating,
+        'comment' => $request->comment,
+        'hiden'=>$request->hiden,
+    ]);
+
+    return redirect()->back()->with('success', 'Comment added successfully.');
+}
+
 
 }

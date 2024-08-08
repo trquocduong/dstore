@@ -28,6 +28,9 @@ Route::controller(HomeController::class)->group(function () {
     // Route::get('/change', 'change')->name('change');
     // Route::get('/news', 'news')->name('news');
 });
+Route::post('/product/{id}/comment', [ProductController::class, 'addComment'])->name('addComment');
+
+
 Route::post('/checkout/voucher', [ProductController::class, 'apply'])->name('apply.voucher');
 Route::prefix('/')->controller(AuthController::class)->group(function ()  {
     Route::get('/admin', 'admin')->name('admin');

@@ -20,4 +20,8 @@ class UserModel extends Model
     public function GetAccount(){
         return self::$limit->get();
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

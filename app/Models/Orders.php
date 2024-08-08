@@ -25,4 +25,8 @@ class Orders extends Model
     {
         return $this->belongsTo(ProductsModel::class, 'product_id');
     }
+    public function items()
+    {
+        return $this->hasMany(OrdersItem::class, 'orders_id'); // Đảm bảo 'order_id' là đúng
+    }
 }
