@@ -15,7 +15,11 @@ class UserModel extends Model
         'password',
         'diachi',
         'dienthoai',
-        'role'
+        'role',
+        'name',
+        'otp',
+        'img'
+
     ];
     public function GetAccount(){
         return self::$limit->get();
@@ -25,3 +29,4 @@ class UserModel extends Model
         return $this->hasMany(Comment::class);
     }
 }
+ 

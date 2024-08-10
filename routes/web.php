@@ -18,6 +18,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/new', 'new')->name('new');
     Route::get('/about', 'about')->name('about');
     Route::get('/contact', 'contact')->name('contact');
+    Route::get('/detail_users', 'detail_users')->name('detail_users');
         // Route::get('/detail', 'detail')->name('detail');
 
     // Route::get('/services', 'services')->name('services');
@@ -28,6 +29,14 @@ Route::controller(HomeController::class)->group(function () {
     // Route::get('/change', 'change')->name('change');
     // Route::get('/news', 'news')->name('news');
 });
+Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+Route::post('/profile/update', [AuthController::class, 'update_profile'])->name('profile.update');
+Route::get('/profile/order', [AuthController::class, 'profile_order'])->name('profile.order');
+Route::get('/profile/detail_order/{id}', [AuthController::class, 'BillDetail'])->name('profile.detail_order');
+Route::get('/change_password', [AuthController::class, 'change_password'])->name('change_password');
+Route::post('/password/update', [AuthController::class, 'update'])->name('password.update');
+
+
 Route::post('/product/{id}/comment', [ProductController::class, 'addComment'])->name('addComment');
 
 
@@ -111,8 +120,9 @@ Route::prefix('/')->controller(BannerController::class)->group(function () {
 });
 Route::prefix('/')->controller(CmtController::class)->group(function () {
     Route::get('/cmt', 'cmt')->name('cmt');
-    Route::get('/update_cmt/{id}', 'update_cmt')->name('update_cmt');
-    Route::put('/edit_cmt/{id}', 'edit_cmt')->name('edit_cmt');
+    Route::post('/block/{id}', 'block')->name('block');
+    Route::delete('/delete/{id}', 'delete')->name('delete');
+ 
 });
 Route::prefix('/')->controller(VoucherController::class)->group(function () {
     Route::get('/voucher', 'voucher')->name('voucher');

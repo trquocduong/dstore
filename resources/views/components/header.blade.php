@@ -28,7 +28,6 @@ $countcart = count($cart);
 								</div>
 							</div>
 						</a>
-						<!-- Mobile menu button -->
 						<div class="main-menu">
 							<div id="header_menu">
 								<a href="index.html"><img src="assets/img/D.png" alt="" width="100" height="35"></a>
@@ -37,65 +36,11 @@ $countcart = count($cart);
 							<ul>
 								<li class="">
 									<a href="{{route('home')}}" >Trang Chủ</a>
-									{{-- <ul>
-										<li><a href="index.html">Slider</a></li>
-										<li><a href="index-2.html">Video Background</a></li>
-										<li><a href="index-3.html">Vertical Slider</a></li>
-										<li><a href="index-4.html">GDPR Cookie Bar</a></li>
-									</ul> --}}
 								</li>
 								<li class="">
 									<a href="{{route('about')}}" >Giới Thiệu</a>
 									<div class="menu-wrapper">
-										{{-- <div class="row small-gutters">
-											<div class="col-lg-3">
-												<h3>Listing grid</h3>
-												<ul>
-													<li><a href="listing-grid-1-full.html">Grid Full Width</a></li>
-													<li><a href="listing-grid-2-full.html">Grid Full Width 2</a></li>
-													<li><a href="listing-grid-3.html">Grid Boxed</a></li>
-													<li><a href="listing-grid-4-sidebar-left.html">Grid Sidebar Left</a></li>
-													<li><a href="listing-grid-5-sidebar-right.html">Grid Sidebar Right</a></li>
-													<li><a href="listing-grid-6-sidebar-left.html">Grid Sidebar Left 2</a></li>
-													<li><a href="listing-grid-7-sidebar-right.html">Grid Sidebar Right 2</a></li>
-												</ul>
-											</div>
-											<div class="col-lg-3">
-												<h3>Listing row &amp; Product</h3>
-												<ul>
-													<li><a href="listing-row-1-sidebar-left.html">Row Sidebar Left</a></li>
-													<li><a href="listing-row-2-sidebar-right.html">Row Sidebar Right</a></li>
-													<li><a href="listing-row-3-sidebar-left.html">Row Sidebar Left 2</a></li>
-													<li><a href="listing-row-4-sidebar-extended.html">Row Sidebar Extended</a></li>
-													<li><a href="product-detail-1.html">Product Large Image</a></li>
-													<li><a href="product-detail-2.html">Product Carousel</a></li>
-													<li><a href="product-detail-3.html">Product Sticky Info</a></li>
-												</ul>
-											</div>
-											<div class="col-lg-3">
-												<h3>Other pages</h3>
-												<ul>
-													<li><a href="cart.html">Cart Page</a></li>
-													<li><a href="checkout.html">Check Out Page</a></li>
-													<li><a href="confirm.html">Confirm Purchase Page</a></li>
-													<li><a href="account.html">Create Account Page</a></li>
-													<li><a href="track-order.html">Track Order</a></li>
-													<li><a href="help.html">Help Page</a></li>
-													<li><a href="help-2.html">Help Page 2</a></li>
-													<li><a href="leave-review.html">Leave a Review</a></li>
-												</ul>
-											</div>
-											<div class="col-lg-3 d-xl-block d-lg-block d-md-none d-sm-none d-none">
-												<div class="banner_menu">
-													<a href="#0">
-														<img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/banner_menu.jpg" width="400" height="550" alt="" class="img-fluid lazy">
-													</a>
-												</div>
-											</div>
-										</div> --}}
-										<!-- /row -->
 									</div>
-									<!-- /menu-wrapper -->
 								</li>
 								<li class="submenu">
 									<a href="{{route('products')}}" class="show-submenu">Sản Phẩm</a>
@@ -113,17 +58,13 @@ $countcart = count($cart);
 								</li>
 							</ul>
 						</div>
-						<!--/main-menu -->
 					</nav>
 					<div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-end">
 						<a class="phone_top" href="tel://9438843343"><strong><span>Hổ trợ?</span>+94 423-23-221</strong></a>
 					</div>
 				</div>
-				<!-- /row -->
 			</div>
 		</div>
-		<!-- /main_header -->
-
 		<div class="main_nav Sticky">
 			<div class="container">
 				<div class="row small-gutters">
@@ -144,13 +85,6 @@ $countcart = count($cart);
 										<ul>
 											@foreach($category as $categorye)
 											<li><span><a href="{{ route('detail_category', ['id' => $categorye->id]) }}">{{$categorye->name}}</a></span>
-												{{-- <ul>
-													<li><a href="listing-grid-1-full.html">Trending</a></li>
-													<li><a href="listing-grid-2-full.html">Life style</a></li>
-													<li><a href="listing-grid-3.html">Running</a></li>
-													<li><a href="listing-grid-4-sidebar-left.html">Training</a></li>
-													<li><a href="listing-grid-5-sidebar-right.html">View all Collections</a></li>
-												</ul> --}}
 											</li>
 											@endforeach
 										</ul>
@@ -226,7 +160,7 @@ $countcart = count($cart);
 									@if(Auth::user()=="")
 									<a href="{{asset('login')}}" class="access_link"><span>Account</span></a>
 								@else
-								<a href="{{asset('login')}}" >
+								<a href="{{route('detail_users')}}" >
 									<img src="" alt="" width="30px" height="30px" style="border-radius: 50%">
 									</a>
 									<div class="dropdown-menu">
@@ -234,13 +168,13 @@ $countcart = count($cart);
 										<a href="">Xin chào: <strong class="fs-6">{{ Auth::user()->username }}</strong></a>
 										<ul>
 											<li>
-												<a href="track-order.html"><i class="ti-truck"></i>Theo dõi đơn hàng của bạn</a>
+												<a href="{{route('profile')}}"><i class="ti-user"></i>Thông tin cá nhân </a>
 											</li>
 											<li>
-												<a href="account.html"><i class="ti-package"></i>Đơn hàng của bạn</a>
+												<a href="{{route('profile.order')}}"><i class="ti-package"></i>Đơn hàng của bạn</a>
 											</li>
 											<li>
-												<a href="account.html"><i class="ti-user"></i>Thông tin cá nhân </a>
+												<a href="{{route('change_password')}}"><i class="ti-truck"></i>Đổi mật khẩu</a>
 											</li>
 											<li>
 												<a class="dropdown-item" href="#" onclick="event.preventDefault();
